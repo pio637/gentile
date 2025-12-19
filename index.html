@@ -11,7 +11,7 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #fff0f3;
             overflow: hidden;
             touch-action: manipulation;
@@ -35,37 +35,35 @@
 
         #success-page { display: none; flex-direction: column; align-items: center; }
 
-        /* Cuore ottimizzato per Mobile */
+        /* Stile del bordo del cuore */
         svg {
             width: 80vw;
-            max-width: 320px;
-            filter: drop-shadow(0 0 10px rgba(255, 77, 109, 0.5));
+            max-width: 350px;
+            /* Crea un effetto bagliore solo sul bordo */
+            filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.8));
         }
 
         .heart-path {
-            fill: transparent;
+            fill: none; /* Assicura che non si riempia mai */
             stroke: #ff4d6d;
-            stroke-width: 10;
+            stroke-width: 8;
             stroke-linecap: round;
-            /* Dasharray grande per coprire tutto il bordo */
             stroke-dasharray: 1500;
             stroke-dashoffset: 1500;
         }
 
-        /* Animazione corretta */
-        @keyframes drawHeart {
-            0% { stroke-dashoffset: 1500; fill: transparent; }
-            80% { stroke-dashoffset: 0; fill: transparent; }
-            100% { stroke-dashoffset: 0; fill: #ff4d6d; }
+        /* Animazione: disegna solo il contorno */
+        @keyframes drawOnlyBorder {
+            to { stroke-dashoffset: 0; }
         }
 
         .animazione-attiva {
-            animation: drawHeart 3s ease-in-out forwards;
+            animation: drawOnlyBorder 3s ease-in-out forwards;
         }
 
         .per-te {
-            margin-top: 20px;
-            font-size: 2.2rem;
+            margin-top: 30px;
+            font-size: 2.5rem;
             color: #ff4d6d;
             font-weight: bold;
             opacity: 0;
@@ -117,26 +115,25 @@
             document.getElementById('main-container').style.display = 'none';
             document.getElementById('success-page').style.display = 'flex';
             
-            // Facciamo partire l'animazione via JS per sicurezza mobile
             const cuore = document.getElementById('cuore');
             cuore.classList.add('animazione-attiva');
             
-            // Mostra la scritta dopo 2.5 secondi
             setTimeout(() => {
-                document.getElementById('testo-finale').style.animation = "fadeIn 1s forwards";
-            }, 2500);
+                document.getElementById('testo-finale').style.animation = "fadeIn 1.5s forwards";
+            }, 2000);
 
             creaPioggia();
         }
 
         function creaPioggia() {
-            const icone = ['❤️', '💖', '✨'];
+            const icone = ['❤️', '💖', '✨', '🌸'];
             setInterval(() => {
                 const h = document.createElement('div');
                 h.className = 'falling-heart';
                 h.innerHTML = icone[Math.floor(Math.random() * icone.length)];
                 h.style.left = Math.random() * 100 + 'vw';
                 h.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                h.style.fontSize = (Math.random() * 20 + 10) + 'px';
                 document.body.appendChild(h);
                 setTimeout(() => h.remove(), 4000);
             }, 300);
