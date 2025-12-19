@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Per te</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: #ffeef8;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        .container { text-align: center; width: 100%; z-index: 10; }
+        h1 { color: #d63384; font-size: 2.5rem; }
+
+        .btn {
+            padding: 15px 35px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            touch-action: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #si { background-color: #ff4d6d; color: white; position: relative; }
+        #no { background-color: #6c757d; color: white; transition: all 0.1s ease; }
+
+        /* Pagina Successo */
+        #success-page { display: none; flex-direction: column; align-items: center; }
+
+        /* Cuore Centrale */
+        .heart-path {
+            fill: none;
+            stroke: #ff4d6d;
+            stroke-width: 5;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawHeart 3s ease-in-out forwards;
+        }
+        @keyframes drawHeart { to { stroke-dashoffset: 0; fill: #ff4d6d; } }
+        
+        .per-te { margin-top: 20px; font-size: 2rem; color: #d63384; font-weight: bold; opacity: 0; animation: fadeIn 1s forwards 2.5s; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        
+        svg { width: 80vw; max-width: 300px; }
+
+        /* Pioggia di cuori */
+        .falling-heart {
+            position: fixed;
+            top: -20px;
+            font-size: 20px;
+            user-select: none;
+            pointer-events: none;
+            z-index: 5;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-container" class="container">
+        <h1>Sono gentile?</h1>
+        <button id="si" class="btn" onclick="mostraCuore()">Sì</button>
+        <button id="no" class="btn">No</button>
+    </div>
+
+    <div id="success-page" class="container">
+        <svg viewBox="0 0 500 500">
+            <path class="heart-path" d="M250,120 C180,20 20,120 20,230 C20,380 250,480 250,480 C250,480 480,380 480,230 C480,120 320,20 250,120 Z" />
+        </svg>
+        <div class="per-te">Per te! ❤️</div>
+    </div>
+
+    <script>
+        const btnNo = document.getElementById('no');
+
+        function scappa() {
+            const maxX = window.innerWidth - btnNo.offsetWidth - 20;
+            const maxY = window.innerHeight - btnNo.offsetHeight - 20;
+            const randomX = Math.floor(Math.random() * maxX);
+            const randomY = Math.floor(Math.random() * maxY);
+            btnNo.style.position = 'fixed';
+            btnNo.style.left = randomX + 'px';
+            btnNo.style.top = randomY + 'px';
+        }
+
+        btnNo.addEventListener('mouseover', scappa);
+        btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); scappa(); });
+
+        function creaPioggia() {
+            const cuori = ['❤️', '💖', '💝', '💕', '🌸'];
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('falling-heart');
+                heart.innerHTML = cuori[Math.floor(Math.random() * cuori.length)];
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                heart.style.opacity = Math.random();
+                heart.style.fontSize = (Math.random() * 20 + 10) + 'px';
+                
+                document.body.appendChild(heart);
+
+                // Rimuove il cuore dopo l'animazione per non appesantire il telefono
+                setTimeout(() => { heart.remove(); }, 5000);
+            }, 300);
+        }
+
+        function mostraCuore() {
+            document.getElementById('main-container').style.display = 'none';
+            document.getElementById('success-page').style.display = 'flex';
+            creaPioggia();
+        }
+    </script>
+</body>
+</html>
